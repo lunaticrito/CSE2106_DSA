@@ -1,3 +1,4 @@
+//count duplicates and insert the count after the last appearance of corresponding element
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -38,3 +39,4 @@ int main(){
 
     return 0;
 }
+
