@@ -6,7 +6,7 @@ public:
     Node* next;
     Node(int val){
         data=val;
-        next=NULL
+        next=NULL;
     }
 };
 class List{
@@ -32,6 +32,7 @@ public:
         Node* newNode=new Node(val);
         if(head==NULL){
             head=newNode;
+            return;
         }
         else{
             Node* temp=head;
@@ -39,14 +40,18 @@ public:
                 temp=temp->next;
             }
             temp->next=newNode;
-            return;
         }
     }
-    //insertion after given node
+    //insertion at position
     void insert(int pos,int val){
+        if(pos<0){return;}
+        else if(pos==0){
+            push_front(val);
+            return;
+        }
         else{
             Node* temp=head;
-            for(int i=0;i<pos-1;i++){
+            for(int i=0;i<pos-1 && temp!=NULL;i++){
                 temp=temp->next;
             }
             Node* newNode = new Node(val);
@@ -54,25 +59,49 @@ public:
             temp->next=newNode;
         }
     }
-
     //deletion from the front
     void pop_front(){
-        Node *temp=head;
-
+        if(head==NULL){ return; }
         
+        Node *temp=head;
+        head=head->next;
+        temp->next=NULL;
+        delete temp;
     }
     //deletion from the back
     void pop_back(){
+        if(head==NULL){ return; }
+        if(head->next==NULL){
+            delete head;
+            head==NULL;
+            return;
+        }
         Node* temp=head;
         while(temp->next->next!=NULL){
             temp=temp->next;
         }
         temp->next=NULL;
-        delete temp;
-
+        delete temp->next;
     }
-    //delete given node
-    void pop_pos(int pos,int val){}
+    //delete node at position
+    void pop_pos(int pos){
+        if(head==NULL){ return; } 
+        else if(pos==0){
+            pop_front();
+            return;
+        }
+        else{
+            Node* temp=head;
+            for(int i=0;i<pos-1 && temp->next!=NULL;i++){
+                temp=temp->next;
+            }
+
+            if(temp->next==NULL) return;
+            Node *del=temp->next;
+            temp->next = del->next;
+            delete del;
+        }
+    }
 
     //printing the values
     void display(){
@@ -81,9 +110,32 @@ public:
             cout<<temp->data<<"->";
             temp=temp->next;
         }
+        cout<<"NULL"<<endl;
     }
-    int search(){}
+    int search(int key){
+        Node* temp=head;
+        int pos=0;
+        while(temp!=NULL){
+            if(temp->data==key)
+                return pos;
+            temp=temp->next;
+            pos++;
+        }
+        return -1;
+    }
 };
 int main(){
+    List l;
 
+    l.push_front(10);
+    l.push_front(5);
+    l.push_back(20);
+    l.insert(1,15);
+    l.display();
+
+    cout << "Position of 20: " << l.search(20) << endl;
+
+    l.pop_front();
+    l.pop_back();
+    l.display();
 }
